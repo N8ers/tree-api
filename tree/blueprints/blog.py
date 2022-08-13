@@ -3,7 +3,7 @@ from flask import (
 )
 from werkzeug.exceptions import abort
 
-from tree.auth import login_required
+from tree.blueprints.auth import login_required
 from tree.db import get_db
 
 bp = Blueprint('blog', __name__)
