@@ -5,4 +5,12 @@
 - Enter venv `. venv/bin/activate`
 - Exit venv `deactivate`
 
-- Run the app `python tree/app.py`
+- Run the app
+
+  - enter venv
+  - `flask --app tree --debug run`
+
+- Initilize the db `flask --app tree init-db`
+
+- Run tests `pytest`
+- Run tests with coverage `coverage run -m pytest` then `coverage report`
