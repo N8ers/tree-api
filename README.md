@@ -14,3 +14,4 @@
 
 - Run tests `pytest`
 - Run tests with coverage `coverage run -m pytest` then `coverage report`
+- Run tests with verbose failures `coverage run -m pytest -v`
