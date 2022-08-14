@@ -1,4 +1,4 @@
-from tree.extensions import db
+from tree import db
 
 
 class Cat(db.Model):

@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 
-from tree.extensions import db
+from tree import db
 
 from tree.models.cat import Cat
 

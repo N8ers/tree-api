@@ -1,6 +1,7 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 
-from tree.extensions import db
+db = SQLAlchemy()
 
 
 def create_app():
@@ -8,9 +9,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
 
     db.init_app(app)
-
     # Migrations here?
-
     register_blueprints(app)
 
     return app
