@@ -37,3 +37,12 @@ def create_cat():
     db.commit()
 
     return f'{name} was created.', 201
+
+
+@blueprint.route('/<int:id>', methods=['DELETE'])
+def delete_cat(id):
+    db = get_db()
+    db.execute('DELETE FROM cat WHERE id = ?', (id,))
+    db.commit()
+
+    return 'Deleted', 200
