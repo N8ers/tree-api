@@ -5,14 +5,6 @@ https://github.dev/AlanSwenson/flask-postgres-travis-dynamic-testing
 import os
 
 
-def get_env_variable(name):
-    try:
-        return os.environ.get(name)
-    except KeyError:
-        message = "Expected environment variable '{}' not set.".format(name)
-        raise Exception(message)
-
-
 # import .env variables for DB connection
 # TODO: Unify these ENV variables by pulling from different dot files
 def get_env_db_url(env_setting):
