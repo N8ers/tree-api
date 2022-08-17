@@ -1,22 +1,23 @@
-import json
 from flask import Blueprint, jsonify, request
 
-from tree.db import get_db
+from tree import db
+
+from tree.models.cat import Cat
 
 blueprint = Blueprint('cat', __name__, url_prefix='/cat')
 
 
 @blueprint.route('/', methods=['GET'])
 def get_all_cats():
-    db = get_db()
-    result = db.execute('SELECT * FROM cat').fetchall()
+
+    result = Cat.query.all()
 
     cats = []
     for cat in result:
         cats.append({
-            'name': cat['name'],
-            'size': cat['size'],
-            'color': cat['color']
+            'name': cat.name,
+            'size': cat.size,
+            'color': cat.color
         })
 
     return jsonify(cats)
@@ -26,23 +27,17 @@ def get_all_cats():
 def create_cat():
     data = request.get_json(force=True)
     name = data['name']
-    size = data['size']
-    color = data['color']
 
-    db = get_db()
-    db.execute(
-        'INSERT INTO cat (name, size, color) VALUES (?, ?, ?)',
-        (name, size, color)
-    )
-    db.commit()
+    new_cat = Cat(name=data['name'], size=data['size'], color=data['color'])
+    db.session.add(new_cat)
+    db.session.commit()
 
     return f'{name} was created.', 201
 
 
 @blueprint.route('/<int:id>', methods=['DELETE'])
 def delete_cat(id):
-    db = get_db()
-    db.execute('DELETE FROM cat WHERE id = ?', (id,))
-    db.commit()
+    Cat.query.filter(Cat.id == id).delete()
+    db.session.commit()
 
     return 'Deleted', 200

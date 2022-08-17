@@ -1,45 +1,25 @@
-import os
-
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
+from tree.config import DevelopmentConfig
+
+db = SQLAlchemy()
 
 
-def create_app(test_config=None):
-    # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'tree.sqlite'),
-    )
+def create_app():
+    app = Flask(__name__)
 
-    if test_config is None:
-        # load the instance config, if it exists, when not testing
-        app.config.from_pyfile('config.py', silent=True)
-    else:
-        # load the test config if passed in
-        app.config.from_mapping(test_config)
+    # TODO test for os.environ for prod vs dev - only having dev is fine for now
+    app.config.from_object(DevelopmentConfig)
 
-    # ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
-
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
-
-    from . import db
     db.init_app(app)
-
-    from .blueprints import (
-        auth, blog, cat
-    )
-
-    app.register_blueprint(auth.bp)
-    app.register_blueprint(blog.bp)
-    app.register_blueprint(cat.blueprint)
-
-    app.add_url_rule('/', endpoint='index')
+    # Migrations here?
+    register_blueprints(app)
 
     return app
+
+
+def register_blueprints(app):
+    from tree.blueprints import cat
+
+    app.register_blueprint(cat.blueprint)
