@@ -2,6 +2,8 @@
 
 ## Running Locally
 
+- Create venv `python3 -m venv venv`
+
 - Enter venv `. venv/bin/activate`
 - Exit venv `deactivate`
 
