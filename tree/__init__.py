@@ -47,22 +47,23 @@ def create_app():
     @app.route("/user", methods=['POST'])
     def create_user():
         request_content = request.get_json()
-        print(request_content)
         user = User(username=request_content['username'])
-        print(user)
         db.session.add(user)
         db.session.commit()
         result = user_schema.dump(user)
         return result, 201
 
-    """ TODO
     @app.route("/user/<int:id>", methods=['GET'])
-    def get_user_by_id():
-        return ""
+    def get_user_by_id(id):
+        user = User.query.get(id)
+        user_dumped = user_schema.dump(user)
+        return user_dumped, 200
 
     @app.route("/user", methods=["DELETE"])
     def delete_user():
-        return ""
-    """
+        request_content = request.get_json()
+        User.query.filter_by(id=request_content["id"]).delete()
+        db.session.commit()
+        return f"user id: {request_content['id']} was deleted", 200
 
     return app
