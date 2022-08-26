@@ -1,8 +1,10 @@
-import sqlite3
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_marshmallow import Marshmallow
+from flask_apispec import use_kwargs, marshal_with, doc
+from webargs import fields
+
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -45,9 +47,16 @@ def create_app():
         return all_users_dumped, 200
 
     @app.route("/user", methods=['POST'])
-    def create_user():
-        request_content = request.get_json()
-        user = User(username=request_content['username'])
+    @use_kwargs({
+        "username": fields.String(required=True, description="The Users username")
+    })
+    @marshal_with(users_schema)
+    @doc(
+        description="",
+        tags=[]
+    )
+    def create_user(username):
+        user = User(username=username)
         db.session.add(user)
         db.session.commit()
         result = user_schema.dump(user)
