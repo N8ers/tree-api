@@ -6,6 +6,10 @@ from flask_apispec import use_kwargs, marshal_with, doc
 from webargs import fields
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_cors import CORS
+from apispec import APISpec
+from apispec.ext.marshmallow import MarshmallowPlugin
+from apispec_webframeworks.flask import FlaskPlugin
+from flask_apispec.extension import FlaskApiSpec
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -21,16 +25,23 @@ def create_app():
     CORS(app)
 
     ## SWAGGER ##
-    SWAGGER_URL = '/swagger'
-    API_URL = '/static/swagger.json'
-    SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
-        SWAGGER_URL,
-        API_URL,
-        config={
-            'app_name': "Seans-Python-Flask-REST-Boilerplate"
-        }
+    spec = APISpec(
+        title="Tree API",
+        version="v1",
+        openapi_version="2.0.0",
+        plugins=[MarshmallowPlugin()]
     )
-    app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
+
+    app.config.update(
+        {"APISPEC_SPEC": spec, "APISPEC_SWAGGER_URL": "/swagger/"})
+    FlaskApiSpec(app)
+
+    swaggerui_blueprint = get_swaggerui_blueprint(
+        "/api-docs",
+        "/static/swagger.json",
+        config={"app_name": "Tree API"}
+    )
+    app.register_blueprint(swaggerui_blueprint)
     #############
 
     class User(db.Model):

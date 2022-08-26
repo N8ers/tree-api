@@ -21,4 +21,5 @@
 - Run tests with coverage `coverage run -m pytest` then `coverage report`
 - Run tests with verbose failures `coverage run -m pytest -v`
 
-- Swagger: `http://localhost:5000/swagger/`
+- Swagger: `http://localhost:5000/api-docs/`
+- Swagger.json: `http://localhost:5000/static/swagger.json/`
