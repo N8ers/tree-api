@@ -25,6 +25,7 @@ def create_app():
     CORS(app)
 
     ## SWAGGER ##
+    # TODO contine working on the swagger setup
     spec = APISpec(
         title="Tree API",
         version="v1",
