@@ -1,0 +1,15 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "This is just a sandbox project.",
+    "version": "1.0.0",
+    "title": "Tree-API",
+    "contact": {
+      "email": "nathanraysheryak@gmail.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  }
+}

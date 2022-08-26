@@ -4,7 +4,8 @@ from flask_migrate import Migrate
 from flask_marshmallow import Marshmallow
 from flask_apispec import use_kwargs, marshal_with, doc
 from webargs import fields
-
+from flask_swagger_ui import get_swaggerui_blueprint
+from flask_cors import CORS
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -17,6 +18,20 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     ma = Marshmallow(app)
+    CORS(app)
+
+    ## SWAGGER ##
+    SWAGGER_URL = '/swagger'
+    API_URL = '/static/swagger.json'
+    SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
+        SWAGGER_URL,
+        API_URL,
+        config={
+            'app_name': "Seans-Python-Flask-REST-Boilerplate"
+        }
+    )
+    app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
+    #############
 
     class User(db.Model):
         id = db.Column(db.Integer, primary_key=True)
